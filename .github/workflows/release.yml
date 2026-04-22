@@ -20,8 +20,9 @@ jobs:
       
       - name: Build Binary
         run: |
+          VERSION="${GITHUB_REF_NAME}"
           CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
-            -ldflags="-s -w" \
+            -ldflags="-s -w -X main.version=${VERSION}" \
             -o setup-docker \
             ./cmd/...
       

@@ -9,8 +9,10 @@ import (
 	"sles-docker-setup/internal/ui"
 )
 
+var version = "Dev"
+
 func main() {
-	ui.PrintBanner()
+	ui.PrintBanner(version)
 
 	// Check if running in container
 	if system.IsRunningInContainer() {

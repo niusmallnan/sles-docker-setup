@@ -16,12 +16,12 @@ var (
 )
 
 // PrintBanner prints the tool banner
-func PrintBanner() {
+func PrintBanner(version string) {
 	fmt.Println()
-	fmt.Println(bold("┌─────────────────────────────────────────┐"))
-	fmt.Println(bold("│   Enterprise Docker Setup Tool v1.0    │"))
-	fmt.Println(bold("│   For SLES 15+ | Internal Use Only    │"))
-	fmt.Println(bold("└─────────────────────────────────────────┘"))
+	fmt.Println(bold("═══════════════════════════════════════════════════════════════════"))
+	fmt.Printf(bold("  Enterprise Docker Setup Tool  |  Version: %s\n"), version)
+	fmt.Println(bold("  For SLES 15+ | Internal Use Only"))
+	fmt.Println(bold("═══════════════════════════════════════════════════════════════════"))
 	fmt.Println()
 }
 

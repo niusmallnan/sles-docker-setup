@@ -16,14 +16,17 @@ deps:
 	go mod download
 	go mod verify
 
+# Get version from git tag or use Dev
+GIT_VERSION := $(shell git describe --tags --exact-match 2>/dev/null || echo "Dev")
+
 # Build static binary
 build: deps
 	@mkdir -p bin
 	CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) GOARCH=$(GOARCH) go build \
-		-ldflags="-s -w" \
+		-ldflags="-s -w -X main.version=$(GIT_VERSION)" \
 		-o $(BINARY_PATH) \
 		./cmd/...
-	@echo "Build complete: $(BINARY_PATH)"
+	@echo "Build complete: $(BINARY_PATH) (version: $(GIT_VERSION))"
 	@echo "File size: $$(du -h $(BINARY_PATH) | cut -f1)"
 
 # Compress binary (requires upx)
