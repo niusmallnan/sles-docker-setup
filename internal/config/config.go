@@ -12,12 +12,12 @@ import (
 
 // Default configuration - customize for your enterprise here
 const (
-	DefaultRegistry    = "registry.example.com"
-	DefaultHTTPProxy   = "http://proxy.example.com:8080"
-	DefaultHTTPSProxy  = "http://proxy.example.com:8080"
-	DefaultNoProxy     = "localhost,127.0.0.1,.example.com"
-	DefaultBIP         = "172.31.0.1/16"
-	SkipKeyword        = "skip"
+	DefaultRegistry   = "registry.example.com"
+	DefaultHTTPProxy  = "http://proxy.example.com:8080"
+	DefaultHTTPSProxy = "http://proxy.example.com:8080"
+	DefaultNoProxy    = "localhost,127.0.0.1,.example.com"
+	DefaultBIP        = "172.31.0.1/16"
+	SkipKeyword       = "skip"
 )
 
 // RegistryConfig holds registry configuration

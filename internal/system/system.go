@@ -100,6 +100,22 @@ func BackupFile(path string) error {
 	return exec.Command("cp", path, path+".bak").Run()
 }
 
+// IsRunningInContainer checks if current process is running inside a container
+func IsRunningInContainer() bool {
+	// Check for /.dockerenv (most container runtimes)
+	if _, err := os.Stat("/.dockerenv"); err == nil {
+		return true
+	}
+
+	// Check /proc/1/cgroup for container indicators
+	data, err := os.ReadFile("/proc/1/cgroup")
+	if err != nil {
+		return false
+	}
+
+	return strings.Contains(string(data), "docker") || strings.Contains(string(data), "kubepods")
+}
+
 // CurrentUserUID returns current user's UID
 func CurrentUserUID() int {
 	u, _ := user.Current()

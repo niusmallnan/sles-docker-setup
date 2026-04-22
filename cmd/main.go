@@ -12,6 +12,11 @@ import (
 func main() {
 	ui.PrintBanner()
 
+	// Check if running in container
+	if system.IsRunningInContainer() {
+		ui.PrintWarning("Running in a container environment - Docker installation will be skipped since we are already in Docker")
+	}
+
 	// Step 1: System Check
 	ui.PrintStep(1, 5, "System Check")
 	if err := system.CheckRequirements(); err != nil {
@@ -22,21 +27,24 @@ func main() {
 
 	// Step 2: Install Docker Engine
 	ui.PrintStep(2, 5, "Install Docker Engine")
-	if install.IsDockerInstalled() {
+	skipDockerInstall := false
+	if system.IsRunningInContainer() {
+		ui.PrintWarning("Detected container environment - skipping Docker installation")
+		skipDockerInstall = true
+	} else if install.IsDockerInstalled() {
 		ui.PrintWarning("Docker is already installed")
 		if !ui.AskConfirm("Skip installation and proceed to configuration?", true) {
-			if err := install.InstallDocker(); err != nil {
-				ui.PrintError("Docker installation failed: %v", err)
-				os.Exit(1)
-			}
+			skipDockerInstall = true
 		}
-	} else {
+	}
+
+	if !skipDockerInstall {
 		if err := install.InstallDocker(); err != nil {
 			ui.PrintError("Docker installation failed: %v", err)
 			os.Exit(1)
 		}
+		ui.PrintSuccess("Docker Engine installed")
 	}
-	ui.PrintSuccess("Docker Engine installed")
 
 	// Step 3: Configure Registry
 	ui.PrintStep(3, 5, "Configure Registry")
@@ -90,13 +98,17 @@ func main() {
 	}
 
 	// Finalize
-	if err := system.RestartDocker(); err != nil {
-		ui.PrintError("Failed to restart Docker service: %v", err)
-		os.Exit(1)
-	}
+	if !system.IsRunningInContainer() {
+		if err := system.RestartDocker(); err != nil {
+			ui.PrintError("Failed to restart Docker service: %v", err)
+			os.Exit(1)
+		}
 
-	if err := system.AddUserToDockerGroup(); err != nil {
-		ui.PrintWarning("Failed to add user to docker group: %v", err)
+		if err := system.AddUserToDockerGroup(); err != nil {
+			ui.PrintWarning("Failed to add user to docker group: %v", err)
+		}
+	} else {
+		ui.PrintInfo("Running in container - skipping Docker service restart and group management")
 	}
 
 	ui.PrintCompletion()
