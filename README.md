@@ -57,6 +57,9 @@ make compress
 
 # Run tests
 make test
+
+# Tab completion should work automatically in most shells (zsh/bash)
+make <tab>
 ```
 
 ### Enterprise Customization

@@ -44,3 +44,8 @@ clean:
 release: compress
 	tar -czvf $(BINARY_NAME)-$(GOOS)-$(GOARCH).tar.gz -C bin $(BINARY_NAME) README.md
 	@echo "Release package created: $(BINARY_NAME)-$(GOOS)-$(GOARCH).tar.gz"
+
+# Test container - builds and runs in SUSE container
+test-container: build
+	docker build -t sles-docker-setup-test .
+	docker run --rm -it --privileged sles-docker-setup-test
