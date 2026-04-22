@@ -37,8 +37,8 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           files: |
-            setup-docker-linux-amd64.tar.gz
-            setup-docker
+            docker-pilot-linux-amd64.tar.gz
+            docker-pilot
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
