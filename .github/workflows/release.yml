@@ -10,12 +10,12 @@ jobs:
     name: Build and Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.21'
+          go-version: '1.26'
           check-latest: true
       
       - name: Build Binary
@@ -31,7 +31,7 @@ jobs:
           tar -czvf setup-docker-linux-amd64.tar.gz setup-docker README.md
       
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           files: |
             setup-docker-linux-amd64.tar.gz
