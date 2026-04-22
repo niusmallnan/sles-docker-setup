@@ -7,11 +7,30 @@ import (
 	"sles-docker-setup/internal/install"
 	"sles-docker-setup/internal/system"
 	"sles-docker-setup/internal/ui"
+
+	"github.com/spf13/cobra"
 )
 
 var version = "Dev"
 
 func main() {
+	Execute()
+}
+
+var rootCmd = &cobra.Command{
+	Use:   "docker-pilot",
+	Short: "Docker Pilot - setup & manage Docker on SLES 15+",
+	Long:  `Docker Pilot - Interactive Docker installation and TUI management tool for SUSE Linux Enterprise Server.`,
+	Run:   runSetup,
+}
+
+func Execute() {
+	if err := rootCmd.Execute(); err != nil {
+		os.Exit(1)
+	}
+}
+
+func runSetup(cmd *cobra.Command, args []string) {
 	ui.PrintBanner(version)
 
 	// Check if running in container

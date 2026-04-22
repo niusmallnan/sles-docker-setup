@@ -1,7 +1,7 @@
 .PHONY: all build clean deps test
 
 # Project name
-BINARY_NAME = setup-docker
+BINARY_NAME = docker-pilot
 BINARY_PATH = bin/$(BINARY_NAME)
 
 # Go build parameters

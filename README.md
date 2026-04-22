@@ -1,39 +1,47 @@
-# SLES Docker Setup Tool
+# Docker Pilot
 
-Enterprise Docker installation and configuration tool, designed specifically for SLES 15+. Zero dependencies, one-click operation.
+Docker installation and TUI management tool, designed specifically for SLES 15+. Zero external dependencies, single binary.
 
 ## Features
 
-- ✅ **Truly zero dependencies** - Go static compilation, single binary, no Python or other runtime required
-- ✅ **Interactive configuration** - Friendly menu guidance, easy for beginners to configure correctly
+- ✅ **Truly zero dependencies** - Statically compiled Go binary, no Python or runtime required
+- ✅ **Interactive configuration** - Friendly menu guide
 - ✅ **Enterprise best practices** - Built-in Registry, HTTP Proxy, and container network CIDR configuration
 - ✅ **Network conflict detection** - Automatically detects if CIDR conflicts with internal network
-- ✅ **Idempotent** - Safe to run multiple times, automatically backs up configuration files
-- ✅ **Skip mechanism** - Each configuration can be skipped temporarily for manual setup later
+- ✅ **Idempotent** - Safe to run multiple times, automatic config backup
+- ✅ **Built-in lazydocker TUI** - Powerful Docker management interface (no separate installation required)
+- ✅ **Container-aware** - Gracefully handles running inside containers
 
 ## Usage
 
-### One-click Run
+### Interactive Setup
 
 ```bash
-curl -sSL https://internal.example.com/tools/setup-docker | sudo bash
+# Run full installation and configuration wizard
+sudo ./docker-pilot
 ```
 
-### Or Download and Run
+### TUI Management
 
 ```bash
-curl -sSL https://internal.example.com/tools/setup-docker -o setup-docker
-chmod +x setup-docker
-sudo ./setup-docker
+# Launch built-in lazydocker TUI for container management
+./docker-pilot tui
+```
+
+### Help
+
+```bash
+# Show available commands
+./docker-pilot --help
 ```
 
 ## Configuration Options
 
-| Configuration | Description | Default Value |
-|---------------|-------------|---------------|
-| **Registry** | Enterprise internal mirror registry address | registry.example.com |
+| Configuration | Description | Default |
+|---------------|-------------|---------|
+| **Registry** | Enterprise internal registry mirror address | registry.example.com |
 | **HTTP Proxy** | Enterprise HTTP/HTTPS proxy | http://proxy.example.com:8080 |
-| **Container CIDR** | Container bridge network, avoid conflicts with internal network | 172.31.0.0/16 |
+| **Container CIDR** | Container bridge network, avoid internal conflicts | 172.31.0.0/16 |
 
 ## Configuration File Locations
 
@@ -44,7 +52,7 @@ sudo ./setup-docker
 
 ### Requirements
 
-- Go 1.21+
+- Go 1.26+
 
 ### Build
 
@@ -62,9 +70,16 @@ make test
 make <tab>
 ```
 
+### Test in Container
+
+```bash
+# Build and run in SUSE container
+make test-container
+```
+
 ### Enterprise Customization
 
-Modify the default value constants in `internal/config/config.go` to adapt to your enterprise environment:
+Modify default values in `internal/config/config.go` to adapt to your enterprise environment:
 
 ```go
 const (
@@ -76,27 +91,29 @@ const (
 )
 ```
 
-To modify the Docker package name, update the `installDockerPackages` function in `internal/install/install.go`.
-
 ## Project Structure
 
 ```
-sles-docker-setup/
+docker-pilot/
 ├── cmd/
-│   └── main.go          # Program entry, workflow orchestration
+│   ├── main.go          # Program entry, workflow orchestration
+│   ├── tui.go           # LazyDocker TUI command
+│   └── embed/           # Embedded lazydocker binary
 ├── internal/
 │   ├── install/         # Docker installation logic
 │   ├── config/          # Configuration handling (Registry/Proxy/CIDR)
 │   ├── system/          # System checks, service management, utilities
 │   └── ui/              # Interactive UI, color output, forms
-├── go.mod
+├── Dockerfile           # Container test environment
 ├── Makefile
+├── go.mod
 └── README.md
 ```
 
 ## Important Notes
 
-- Must run with sudo
+- Must run with sudo for system modifications
 - SLES 15+ only
-- Docker service will restart automatically after configuration changes
-- Current user is automatically added to the `docker` group - requires re-login or running `newgrp docker` to take effect
+- Docker service restarts automatically after configuration changes
+- Current user is automatically added to `docker` group
+- When running inside a container, installation steps are skipped

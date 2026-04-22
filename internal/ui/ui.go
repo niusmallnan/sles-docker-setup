@@ -19,8 +19,8 @@ var (
 func PrintBanner(version string) {
 	fmt.Println()
 	fmt.Println(bold("═══════════════════════════════════════════════════════════════════"))
-	fmt.Printf(bold("  Enterprise Docker Setup Tool  |  Version: %s\n"), version)
-	fmt.Println(bold("  For SLES 15+ | Internal Use Only"))
+	fmt.Printf(bold("  Docker Pilot  |  Version: %s\n"), version)
+	fmt.Println(bold("  Docker setup & TUI management for SLES 15+"))
 	fmt.Println(bold("═══════════════════════════════════════════════════════════════════"))
 	fmt.Println()
 }

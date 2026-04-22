@@ -31,7 +31,7 @@ jobs:
       
       - name: Create Release Archive
         run: |
-          tar -czvf setup-docker-linux-amd64.tar.gz setup-docker README.md
+          tar -czvf docker-pilot-linux-amd64.tar.gz docker-pilot README.md
       
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
