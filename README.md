@@ -5,27 +5,50 @@ Docker installation and TUI management tool, designed specifically for SLES 15+.
 ## Features
 
 - ✅ **Truly zero dependencies** - Statically compiled Go binary, no Python or runtime required
-- ✅ **Interactive configuration** - Friendly menu guide
+- ✅ **Interactive configuration** - Friendly menu guide with Quick/Advanced modes
 - ✅ **Enterprise best practices** - Built-in Registry, HTTP Proxy, and container network CIDR configuration
 - ✅ **Network conflict detection** - Automatically detects if CIDR conflicts with internal network
 - ✅ **Idempotent** - Safe to run multiple times, automatic config backup
 - ✅ **Built-in lazydocker TUI** - Powerful Docker management interface (no separate installation required)
 - ✅ **Container-aware** - Gracefully handles running inside containers
+- ✅ **Security scanning** - Scan containers and images for CVE vulnerabilities
+- ✅ **AI health inspection** - AI-powered container health analysis
 
 ## Usage
 
-### Interactive Setup
+### Configuration (Default Command)
 
 ```bash
-# Run full installation and configuration wizard
+# Run installation and configuration wizard (defaults to `config` command)
 sudo ./docker-pilot
+
+# Or explicitly
+sudo ./docker-pilot config
 ```
+
+`config` command has two modes:
+- **Quick mode (default)**: Install Docker only, skip configuration
+- **Advanced mode**: Full setup with registry, proxy, and network configuration
 
 ### TUI Management
 
 ```bash
 # Launch built-in lazydocker TUI for container management
 ./docker-pilot tui
+```
+
+### Security Scanning
+
+```bash
+# Scan containers and images for CVE vulnerabilities
+sudo ./docker-pilot scan
+```
+
+### AI Health Inspection
+
+```bash
+# AI-powered analysis of container health status
+sudo ./docker-pilot ai-inspect
 ```
 
 ### Help
@@ -96,14 +119,16 @@ const (
 ```
 docker-pilot/
 ├── cmd/
-│   ├── main.go          # Program entry, workflow orchestration
+│   ├── main.go          # Program entry, commands: config/scan/ai-inspect
 │   ├── tui.go           # LazyDocker TUI command
-│   └── embed/           # Embedded lazydocker binary
+│   └── embed/           # Embedded binaries (lazydocker, trivy, etc.)
 ├── internal/
 │   ├── install/         # Docker installation logic
 │   ├── config/          # Configuration handling (Registry/Proxy/CIDR)
 │   ├── system/          # System checks, service management, utilities
 │   └── ui/              # Interactive UI, color output, forms
+├── scripts/
+│   └── ref-embed.sh     # Script to refresh embedded binaries
 ├── Dockerfile           # Container test environment
 ├── Makefile
 ├── go.mod

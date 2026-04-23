@@ -30,8 +30,24 @@ var configCmd = &cobra.Command{
 	Run:   runConfig,
 }
 
+var scanCmd = &cobra.Command{
+	Use:   "scan",
+	Short: "Scan containers and images for CVE vulnerabilities",
+	Long:  `Scan all containers and images on the host for known CVE vulnerabilities.`,
+	Run:   runScan,
+}
+
+var aiInspectCmd = &cobra.Command{
+	Use:   "ai-inspect",
+	Short: "AI-powered container health inspection",
+	Long:  `Use AI to analyze and inspect the health status of all running containers on the host.`,
+	Run:   runAiInspect,
+}
+
 func init() {
 	rootCmd.AddCommand(configCmd)
+	rootCmd.AddCommand(scanCmd)
+	rootCmd.AddCommand(aiInspectCmd)
 }
 
 func Execute() {
@@ -166,4 +182,14 @@ func runConfig(cmd *cobra.Command, args []string) {
 	}
 
 	ui.PrintCompletion()
+}
+
+func runScan(cmd *cobra.Command, args []string) {
+	ui.PrintBanner(version)
+	ui.PrintInfo("scan command - coming soon")
+}
+
+func runAiInspect(cmd *cobra.Command, args []string) {
+	ui.PrintBanner(version)
+	ui.PrintInfo("ai-inspect command - coming soon")
 }

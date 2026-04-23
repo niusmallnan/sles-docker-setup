@@ -1,4 +1,4 @@
-.PHONY: all build clean deps test ref-embed
+.PHONY: all build clean deps test ref-embed help
 
 # Project name
 BINARY_NAME = docker-pilot
@@ -56,3 +56,18 @@ ref-embed:
 test-container: build
 	docker build -t sles-docker-setup-test .
 	docker run --rm -it --privileged sles-docker-setup-test
+
+# Show help
+help:
+	@echo "Available targets:"
+	@echo "  all             - Build binary (default)"
+	@echo "  build           - Build static binary"
+	@echo "  compress        - Build and compress with upx"
+	@echo "  deps            - Download dependencies"
+	@echo "  test            - Run tests"
+	@echo "  clean           - Clean build artifacts"
+	@echo "  release         - Build release package"
+	@echo "  ref-embed       - Refresh embedded binaries (lazydocker, etc.)"
+	@echo "  test-container  - Build and test in SUSE container"
+	@echo "  help            - Show this help"
+
