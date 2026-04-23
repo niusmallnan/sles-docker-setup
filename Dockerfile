@@ -2,10 +2,10 @@
 FROM registry.suse.com/bci/bci-base:15.7
 
 # Copy our setup binary
-COPY bin/setup-docker /usr/local/bin/setup-docker
+COPY bin/docker-pilot /usr/local/bin/docker-pilot
 
 # Give execute permission
-RUN chmod +x /usr/local/bin/setup-docker
+RUN chmod +x /usr/local/bin/docker-pilot
 
 # Set working directory
 WORKDIR /root

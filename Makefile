@@ -1,4 +1,4 @@
-.PHONY: all build clean deps test
+.PHONY: all build clean deps test ref-embed
 
 # Project name
 BINARY_NAME = docker-pilot
@@ -47,6 +47,10 @@ clean:
 release: compress
 	tar -czvf $(BINARY_NAME)-$(GOOS)-$(GOARCH).tar.gz -C bin $(BINARY_NAME) README.md
 	@echo "Release package created: $(BINARY_NAME)-$(GOOS)-$(GOARCH).tar.gz"
+
+# Download and embed lazydocker (Linux amd64)
+ref-embed:
+	./scripts/ref-embed.sh
 
 # Test container - builds and runs in SUSE container
 test-container: build
