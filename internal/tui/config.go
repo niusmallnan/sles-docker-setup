@@ -251,18 +251,18 @@ func (m ConfigModel) renderModeSelection() string {
 	s.WriteString("Please select installation mode:\n\n")
 
 	for i, option := range options {
-		cursor := " "
+		var line string
 		if i == m.selectedMode {
-			cursor = ">"
-		}
-		if i == m.selectedMode {
+			line = fmt.Sprintf("> %s", option)
 			selectedStyle := lipgloss.NewStyle().
 				Foreground(lipgloss.Color("#00FF00")).
 				Bold(true)
-			s.WriteString(selectedStyle.Render(fmt.Sprintf("%s %s\n", cursor, option)))
+			s.WriteString(selectedStyle.Render(line))
 		} else {
-			s.WriteString(fmt.Sprintf("%s %s\n", cursor, option))
+			line = fmt.Sprintf("  %s", option)
+			s.WriteString(line)
 		}
+		s.WriteString("\n")
 	}
 
 	return s.String()
