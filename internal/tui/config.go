@@ -142,8 +142,19 @@ func (m ConfigModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.step == 2 {
 			m.inputs[0], cmd = m.inputs[0].Update(msg)
 		} else if m.step == 3 {
+			// Update HTTP Proxy and auto-sync to HTTPS Proxy if they were the same
+			oldHTTP := m.inputs[1].Value()
+			oldHTTPS := m.inputs[2].Value()
 			m.inputs[1], cmd = m.inputs[1].Update(msg)
-			m.inputs[2], _ = m.inputs[2].Update(msg)
+			newHTTP := m.inputs[1].Value()
+			
+			// If HTTPS was same as HTTP before, or HTTPS is empty, auto-sync
+			if oldHTTP == oldHTTPS || oldHTTPS == "" {
+				m.inputs[2].SetValue(newHTTP)
+			} else {
+				// Otherwise just update HTTPS as usual
+				m.inputs[2], _ = m.inputs[2].Update(msg)
+			}
 		} else if m.step == 4 {
 			m.inputs[3], cmd = m.inputs[3].Update(msg)
 		}
@@ -299,12 +310,13 @@ func (m ConfigModel) renderProxyConfig() string {
 	var s strings.Builder
 
 	s.WriteString("Configure HTTP/HTTPS proxy (optional)\n")
-	s.WriteString("Fill in either or both, then press Enter to continue\n\n")
+	s.WriteString("💡 Tip: Enter HTTP Proxy, HTTPS Proxy will auto-sync for you\n")
+	s.WriteString("Press Enter to continue\n\n")
 	s.WriteString("HTTP Proxy:\n")
 	s.WriteString(m.inputs[1].View())
 	s.WriteString("\n\nHTTPS Proxy:\n")
 	s.WriteString(m.inputs[2].View())
-	s.WriteString("\n\nUse Tab to switch between inputs")
+	s.WriteString("\n\nUse Tab to switch between inputs if you need different values")
 
 	return s.String()
 }
