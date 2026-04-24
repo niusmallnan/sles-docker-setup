@@ -273,23 +273,38 @@ func (m ConfigModel) renderSystemCheck() string {
 
 	s.WriteString("System check...\n\n")
 
+	// Prefix style that enforces fixed width for perfect alignment
+	prefixStyle := lipgloss.NewStyle().Width(3)
+
 	// In container warning
 	if m.inContainer {
 		warningStyle := lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#FFFF00"))
-		s.WriteString(warningStyle.Render("⚠️ Running in container - Docker install skipped\n"))
+		line := lipgloss.JoinHorizontal(lipgloss.Left,
+			prefixStyle.Render("⚠️"),
+			" Running in container - Docker install skipped",
+		)
+		s.WriteString(warningStyle.Render(line) + "\n")
 	}
 
 	// Docker exists
 	if m.dockerExists && !m.inContainer {
 		infoStyle := lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#00FFFF"))
-		s.WriteString(infoStyle.Render("ℹ️ Docker is already installed\n"))
+		line := lipgloss.JoinHorizontal(lipgloss.Left,
+			prefixStyle.Render("ℹ️"),
+			" Docker is already installed",
+		)
+		s.WriteString(infoStyle.Render(line) + "\n")
 	}
 
 	successStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#00FF00"))
-	s.WriteString(successStyle.Render("✓ System check passed\n"))
+	line := lipgloss.JoinHorizontal(lipgloss.Left,
+		prefixStyle.Render("✓"),
+		" System check passed",
+	)
+	s.WriteString(successStyle.Render(line) + "\n")
 
 	s.WriteString("\nPress Enter to continue...")
 
