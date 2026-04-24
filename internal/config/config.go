@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"sles-docker-setup/internal/system"
-	"sles-docker-setup/internal/ui"
+	"docker-pilot/internal/system"
+	"docker-pilot/internal/ui"
 )
 
 // Default configuration - customize for your enterprise here

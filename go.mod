@@ -1,4 +1,4 @@
-module sles-docker-setup
+module docker-pilot
 
 go 1.26.2
 

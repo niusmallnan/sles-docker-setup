@@ -54,8 +54,8 @@ ref-embed:
 
 # Test container - builds and runs in SUSE container
 test-container: build
-	docker build -t sles-docker-setup-test .
-	docker run --rm -it --privileged sles-docker-setup-test
+	docker build -t docker-pilot-test .
+	docker run --rm -it --privileged docker-pilot-test
 
 # Show help
 help:

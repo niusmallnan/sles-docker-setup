@@ -9,11 +9,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"sles-docker-setup/internal/config"
-	"sles-docker-setup/internal/install"
-	"sles-docker-setup/internal/system"
-	"sles-docker-setup/internal/tui"
-	"sles-docker-setup/internal/ui"
+	"docker-pilot/internal/config"
+	"docker-pilot/internal/install"
+	"docker-pilot/internal/system"
+	"docker-pilot/internal/tui"
+	"docker-pilot/internal/ui"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"

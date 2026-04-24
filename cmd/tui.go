@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/cobra"
-	"sles-docker-setup/internal/ui"
+	"docker-pilot/internal/ui"
 )
 
 //go:embed embed/lazydocker
