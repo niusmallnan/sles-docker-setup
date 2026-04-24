@@ -271,20 +271,20 @@ func (m ConfigModel) renderModeSelection() string {
 func (m ConfigModel) renderSystemCheck() string {
 	var s strings.Builder
 
-	s.WriteString("System check...\n")
+	s.WriteString("System check...\n\n")
 
 	// In container warning
 	if m.inContainer {
 		warningStyle := lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#FFFF00"))
-		s.WriteString(warningStyle.Render("⚠️  Running in container - Docker install skipped\n"))
+		s.WriteString(warningStyle.Render("⚠️ Running in container - Docker install skipped\n"))
 	}
 
 	// Docker exists
 	if m.dockerExists && !m.inContainer {
 		infoStyle := lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#00FFFF"))
-		s.WriteString(infoStyle.Render("ℹ️  Docker is already installed\n"))
+		s.WriteString(infoStyle.Render("ℹ️ Docker is already installed\n"))
 	}
 
 	successStyle := lipgloss.NewStyle().
