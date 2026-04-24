@@ -80,7 +80,7 @@ sudo ./docker-pilot ai-inspect
 ### Build
 
 ```bash
-# Build
+# Build (automatically downloads embedded binaries if missing)
 make build
 
 # Build and compress
@@ -88,6 +88,9 @@ make compress
 
 # Run tests
 make test
+
+# Refresh embedded binaries manually (if needed)
+make ref-embed
 
 # Tab completion should work automatically in most shells (zsh/bash)
 make <tab>

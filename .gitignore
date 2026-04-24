@@ -33,6 +33,9 @@ Thumbs.db
 *.tar.gz
 *.zip
 
+# Embedded binaries (downloaded at build time)
+cmd/embed/
+
 # Log files
 *.log
 logs/

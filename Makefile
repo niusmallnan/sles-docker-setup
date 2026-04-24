@@ -20,7 +20,7 @@ deps:
 GIT_VERSION := $(shell git describe --tags --exact-match 2>/dev/null || echo "Dev")
 
 # Build static binary
-build: deps
+build: deps ref-embed
 	@mkdir -p bin
 	CGO_ENABLED=$(CGO_ENABLED) GOOS=$(GOOS) GOARCH=$(GOARCH) go build \
 		-ldflags="-s -w -X main.version=$(GIT_VERSION)" \
