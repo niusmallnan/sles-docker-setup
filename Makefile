@@ -52,10 +52,10 @@ release: compress
 ref-embed:
 	./scripts/ref-embed.sh
 
-# Test container - builds and runs in SUSE container
+# Test container - builds and runs in container with docker.sock mounted
 test-container: build
 	docker build -t docker-pilot-test .
-	docker run --rm -it --privileged docker-pilot-test
+	docker run --rm -it -v /var/run/docker.sock:/var/run/docker.sock docker-pilot-test
 
 # Show help
 help:
@@ -68,6 +68,6 @@ help:
 	@echo "  clean           - Clean build artifacts"
 	@echo "  release         - Build release package"
 	@echo "  ref-embed       - Refresh embedded binaries (lazydocker, etc.)"
-	@echo "  test-container  - Build and test in SUSE container"
+	@echo "  test-container  - Build and test in container with docker.sock mounted"
 	@echo "  help            - Show this help"
 
