@@ -43,8 +43,8 @@ var configCmd = &cobra.Command{
 
 var scanCmd = &cobra.Command{
 	Use:   "scan",
-	Short: "Scan containers and images for CVE vulnerabilities",
-	Long:  `Scan all containers and images on the host for known CVE vulnerabilities.`,
+	Short: "Scan Docker images for CVE vulnerabilities",
+	Long:  `Scan all Docker images on the host for known CVE vulnerabilities.`,
 	Run:   runScan,
 }
 
@@ -228,6 +228,40 @@ func runScan(cmd *cobra.Command, args []string) {
 	}
 }
 
+// ImageInfo holds Docker image information
+type ImageInfo struct {
+	ID   string
+	Name string
+}
+
+func getDockerImages() ([]ImageInfo, error) {
+	cmd := exec.Command("docker", "images", "--format", "{{.ID}}|{{.Repository}}:{{.Tag}}")
+	output, err := cmd.Output()
+	if err != nil {
+		return nil, err
+	}
+	lines := strings.Split(strings.TrimSpace(string(output)), "\n")
+	var images []ImageInfo
+	for _, line := range lines {
+		if line != "" {
+			parts := strings.SplitN(line, "|", 2)
+			if len(parts) == 2 {
+				images = append(images, ImageInfo{
+					ID:   parts[0],
+					Name: parts[1],
+				})
+			} else {
+				// Fallback: use the whole line as ID if parsing fails
+				images = append(images, ImageInfo{
+					ID:   line,
+					Name: line,
+				})
+			}
+		}
+	}
+	return images, nil
+}
+
 func runEmbeddedTrivy() error {
 	// Read embedded binary
 	data, err := trivyFS.ReadFile("embed/trivy")
@@ -247,24 +281,37 @@ func runEmbeddedTrivy() error {
 		return err
 	}
 
-	// Run trivy - first scan images, then containers
-	ui.PrintStep(1, 2, "Scanning Docker images")
-	cmd := exec.Command(tmpPath, "image", "--severity", "CRITICAL,HIGH,MEDIUM", "--format", "table", "--no-progress", "all")
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		// Don't exit on scan errors - just continue
-		ui.PrintWarning("Image scan completed with some warnings")
-	}
+	// Run trivy - scan Docker images
+	ui.PrintStep(1, 1, "Scanning Docker images")
+	// Get all image info
+	images, err := getDockerImages()
+	if err != nil || len(images) == 0 {
+		ui.PrintWarning("No images to scan or failed to list images")
+	} else {
+		// Build Trivy args
+		args := []string{"image", "--scanners", "vuln", "--severity", "CRITICAL,HIGH", "--format", "table", "--no-progress"}
+		// Check if verbose mode is enabled
+		if os.Getenv("DOCKER_PILOT_VERBOSE_TRIVY") != "1" {
+			args = append(args, "--quiet")
+		}
+		// Scan each image
+		for _, image := range images {
+			// Print highlight header for this image
+			fmt.Println()
+			fmt.Println("═══════════════════════════════════════════════════════════════════")
+			fmt.Printf("  SCANNING IMAGE: %s\n", image.Name)
+			fmt.Printf("  IMAGE ID:     %s\n", image.ID)
+			fmt.Println("═══════════════════════════════════════════════════════════════════")
+			fmt.Println()
 
-	ui.PrintStep(2, 2, "Scanning running containers")
-	cmd = exec.Command(tmpPath, "container", "--severity", "CRITICAL,HIGH,MEDIUM", "--format", "table", "--no-progress", "--include-non-running", "all")
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		ui.PrintWarning("Container scan completed with some warnings")
+			cmd := exec.Command(tmpPath, append(args, image.ID)...)
+			cmd.Stdin = os.Stdin
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+			if err := cmd.Run(); err != nil {
+				ui.PrintWarning(fmt.Sprintf("Image scan for %s completed with some warnings", image.Name))
+			}
+		}
 	}
 
 	ui.PrintSuccess("\nScan complete!")
