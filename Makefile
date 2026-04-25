@@ -45,7 +45,7 @@ clean:
 
 # Build release package
 release: compress
-	tar -czvf $(BINARY_NAME)-$(GOOS)-$(GOARCH).tar.gz -C bin $(BINARY_NAME) README.md
+	tar -czvf $(BINARY_NAME)-$(GOOS)-$(GOARCH).tar.gz -C bin $(BINARY_NAME)
 	@echo "Release package created: $(BINARY_NAME)-$(GOOS)-$(GOARCH).tar.gz"
 
 # Download and embed lazydocker (Linux amd64)
