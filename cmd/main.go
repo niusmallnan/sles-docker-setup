@@ -157,10 +157,10 @@ func runConfig(cmd *cobra.Command, args []string) {
 				noProxy = existingNoProxy
 			}
 			proxyConfig := config.ProxyConfig{
-				Configured:  true,
-				HTTPProxy:   httpProxy,
-				HTTPSProxy:  httpsProxy,
-				NoProxy:     noProxy,
+				Configured: true,
+				HTTPProxy:  httpProxy,
+				HTTPSProxy: httpsProxy,
+				NoProxy:    noProxy,
 			}
 			if err := config.WriteProxyConfig(proxyConfig); err != nil {
 				ui.PrintError("Failed to write Proxy configuration: %v", err)
@@ -273,9 +273,9 @@ func runEmbeddedTrivy() error {
 
 // ContainerInfo represents Docker container inspection data
 type ContainerInfo struct {
-	ID     string `json:"Id"`
-	Name   string
-	State  struct {
+	ID    string `json:"Id"`
+	Name  string
+	State struct {
 		Status       string
 		Running      bool
 		RestartCount int    `json:"RestartCount"`

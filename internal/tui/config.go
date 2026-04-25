@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/bubbles/textinput"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
@@ -147,7 +147,7 @@ func (m ConfigModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			oldHTTPS := m.inputs[2].Value()
 			m.inputs[1], cmd = m.inputs[1].Update(msg)
 			newHTTP := m.inputs[1].Value()
-			
+
 			// If HTTPS was same as HTTP before, or HTTPS is empty, auto-sync
 			if oldHTTP == oldHTTPS || oldHTTPS == "" {
 				m.inputs[2].SetValue(newHTTP)

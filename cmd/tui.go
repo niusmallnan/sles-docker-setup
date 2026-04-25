@@ -6,8 +6,8 @@ import (
 	"os/exec"
 	"path/filepath"
 
-	"github.com/spf13/cobra"
 	"docker-pilot/internal/ui"
+	"github.com/spf13/cobra"
 )
 
 //go:embed embed/lazydocker
