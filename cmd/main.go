@@ -433,17 +433,17 @@ func printHealthReport(reports []ContainerHealth) {
 		}
 	}
 
-	ui.PrintInfo(fmt.Sprintf("Inspection complete - %d containers analyzed", len(reports)))
+	ui.PrintInfo("Inspection complete - %d containers analyzed", len(reports))
 	ui.PrintInfo("")
 
 	if criticalCount > 0 {
-		ui.PrintError(fmt.Sprintf("Critical: %d containers need immediate attention", criticalCount))
+		ui.PrintError("Critical: %d containers need immediate attention", criticalCount)
 	}
 	if warningCount > 0 {
-		ui.PrintWarning(fmt.Sprintf("Warning: %d containers have potential issues", warningCount))
+		ui.PrintWarning("Warning: %d containers have potential issues", warningCount)
 	}
 	if healthyCount > 0 {
-		ui.PrintSuccess(fmt.Sprintf("Healthy: %d containers are running well", healthyCount))
+		ui.PrintSuccess("Healthy: %d containers are running well", healthyCount)
 	}
 
 	ui.PrintInfo("")
@@ -454,7 +454,7 @@ func printHealthReport(reports []ContainerHealth) {
 		fmt.Println("")
 		fmt.Printf("Container %d/%d: %s\n", i+1, len(reports), r.Container.Name)
 		fmt.Printf("  Image: %s\n", r.Container.Config.Image)
-		fmt.Printf("  Status: ", r.Container.State.Status)
+		fmt.Printf("  Status: %s", r.Container.State.Status)
 
 		switch r.Status {
 		case "healthy":
